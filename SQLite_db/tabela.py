@@ -34,7 +34,25 @@ class SqliteTabela(BaseSqlite):
             id_entrada INT,
             id_produto INT,
             quantidade INT,
-            valor_unitario REAL
+            valor_unitario REAL,
+
+            FOREIGN KEY (id_produto) REFERENCES PRODUTO(ID_produto)
+
+            )"""
+
+        self.withdb.execute(query)
+
+    def produto(self):
+
+        self.ativar_with()
+        """
+            produto
+        """
+        query = """CREATE TABLE if not exists PRODUTO(
+
+            ID_produto INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            nome_produto  TEXT
 
             )"""
 
@@ -42,5 +60,9 @@ class SqliteTabela(BaseSqlite):
 
     def criar_tabelas(self):
 
+        # primarias
+        self.produto()
+
+        # secundarias- dependentes
         self.entrada()
         self.subentrada()

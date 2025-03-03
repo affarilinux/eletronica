@@ -9,7 +9,9 @@ import json
 from front_entrada.alertdialog_titulo import AlertDialogTitulo
 from front_entrada.alertdialog_editartitulo import AlertDialogEditarTitulo
 from front_entrada.db.db_pagina import DbPagina
+
 from front_entrada.menores import EntradaMenores
+from menores import frontMenores
 
 
 class PaginaEntrada:
@@ -28,6 +30,29 @@ class PaginaEntrada:
 
         Pagina.PAGE.floating_action_button = self.fab
         Pagina.PAGE.update()
+
+    def criar_list_row_button(self, exp, id, dado):
+
+        return [
+            IconButton(
+                Icons.DELETE,
+                tooltip="Deletar",
+                data=(exp, id, dado),
+                on_click=lambda e: (
+                    EntradaMenores().menor_apagar_titulo(
+                        e.control.data[1],
+                        e.control.data[2]
+                    )
+                )),
+
+            IconButton(
+                Icons.EDIT,
+                tooltip="Editar",
+                data=(exp, id),
+                on_click=lambda e: (
+                    AlertDialogEditarTitulo(e.control.data[1]))
+            ),
+        ]
 
     def entrada_listview(self):
 
@@ -61,45 +86,20 @@ class PaginaEntrada:
             controls=[]
         )
 
-        colors = [
-            Colors.GREEN_500,
-            Colors.BLUE_800,
-            Colors.RED_800,
-        ]
-
         # Obtendo dados do banco de dados e invertendo a ordem
         dados = DbPagina().select_pagina()[::-1]
 
         for i, (id, dado) in enumerate(dados):
 
             exp = ExpansionPanel(
-                bgcolor=colors[i % len(colors)],
+                bgcolor=(frontMenores().cor_list_view()[
+                         i % len(frontMenores().cor_list_view())]),
                 header=ListTile(title=Text(f"{dado}")),
             )
 
             exp.content = Column(
                 controls=[
-                    Row(
-                        controls=[
-                            IconButton(
-                                Icons.DELETE,
-                                tooltip="Deletar",
-                                data=(exp, id, dado),
-                                on_click=lambda e: (
-                                    EntradaMenores().menor_apagar_titulo(
-                                        e.control.data[1],
-                                        e.control.data[2]
-                                    )
-                                )),
-                            IconButton(
-                                Icons.EDIT,
-                                tooltip="Editar",
-                                data=(exp, id),
-                                on_click=lambda e: (
-                                    AlertDialogEditarTitulo(e.control.data[1]))
-                            ),
-                        ]
-                    ),
+                    Row(controls=self.criar_list_row_button(exp, id, dado)),
                 ],
                 alignment="start",
             )
@@ -137,7 +137,6 @@ class PaginaEntrada:
 
         self.entrada_apagar_pagina()
         self.entrada_criar_pagina()
-        self.entrada_appbar()
 
     def entrada_apagar_pagina(self):
 

@@ -1,4 +1,4 @@
-from flet import SnackBar, Text, FontWeight
+from flet import SnackBar, Text, FontWeight, Colors
 
 
 class frontMenores:
@@ -15,3 +15,11 @@ class frontMenores:
         Pagina.PAGE.open(self.snackbar)
 
         Pagina.PAGE.update()
+
+    def cor_list_view(self):
+
+        return [
+            Colors.GREEN_500,
+            Colors.BLUE_800,
+            Colors.RED_800,
+        ]
