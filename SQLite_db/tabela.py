@@ -3,9 +3,8 @@ from SQLite_db.base import BaseSqlite
 
 class SqliteTabela(BaseSqlite):
 
-    def __init__(self) -> None:
+    def entrada(self):
 
-        # banco de dados
         self.ativar_with()
 
         """   
@@ -22,6 +21,9 @@ class SqliteTabela(BaseSqlite):
 
         self.withdb.execute(query)
 
+    def subentrada(self):
+
+        self.ativar_with()
         """
             subentrada
         """
@@ -32,8 +34,13 @@ class SqliteTabela(BaseSqlite):
             id_entrada INT,
             id_produto INT,
             quantidade INT,
-            valor_unitario REAL,
+            valor_unitario REAL
 
             )"""
 
         self.withdb.execute(query)
+
+    def criar_tabelas(self):
+
+        self.entrada()
+        self.subentrada()

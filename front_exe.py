@@ -18,7 +18,7 @@ class FrontExe:
 
         Pagina.PAGE = page
 
-        tab = SqliteTabela()
+        SqliteTabela().criar_tabelas()
 
         self.appbar_janela()
         self.adicionar_janela()
@@ -60,7 +60,13 @@ class FrontExe:
                 Container(height=12),
 
                 NavigationDrawerDestination(
-                    label="Leitura",
+                    label="Vendas",
+                    icon=Icons.BOOKMARKS_OUTLINED,
+                    selected_icon=Icons.MENU_BOOK,
+                ),
+
+                NavigationDrawerDestination(
+                    label="Manutenção",
                     icon=Icons.BOOKMARKS_OUTLINED,
                     selected_icon=Icons.MENU_BOOK,
                 ),
@@ -69,13 +75,13 @@ class FrontExe:
 
                 NavigationDrawerDestination(
                     icon=Icons.ADD_CIRCLE_OUTLINE,
-                    label="Adicionar",
+                    label="Entrada",
                     selected_icon=Icons.ADD_CIRCLE_OUTLINED,
                 ),
                 NavigationDrawerDestination(
-                    icon=Icons.PHONE_OUTLINED,
-                    label="Item 3",
-                    selected_icon=Icons.PHONE,
+                    icon=Icons.SETTINGS_OUTLINED,
+                    label="Configuração",
+                    selected_icon=Icons.SETTINGS_ROUNDED,
                 ),
             ],
         )
@@ -97,34 +103,44 @@ class FrontExe:
         match FrontExe.if_drawer:
 
             case 0:
-                """from front_cronograma.pagina import PaginaCronograma
 
-                home = PaginaCronograma()
-                home.cronograma_remover_pagina()"""
                 pass
 
             case 1:
                 pass
 
             case 2:
-                pass
+                from front_entrada.pagina import PaginaEntrada
+
+                PaginaEntrada().entrada_apagar_pagina()
+
+            case 3:
+
+                from front_configuracao.pagina import PaginaConfiguracao
+
+                PaginaConfiguracao().configuracao_update_switch(0, None)
 
     def adicionar_janela(self):
 
         match FrontExe.if_drawer:
 
             case 0:
-                """from front_cronograma.pagina import PaginaCronograma
 
-                adic = PaginaCronograma()
-                adic.cronograma_criar_pagina()"""
                 pass
 
             case 1:
+                pass
+
+            case 2:
+
                 from front_entrada.pagina import PaginaEntrada
 
                 adic1 = PaginaEntrada()
                 adic1.entrada_criar_pagina()
 
-            case 2:
-                pass
+            case 3:
+
+                from front_configuracao.pagina import PaginaConfiguracao
+
+                adic2 = PaginaConfiguracao()
+                adic2.configuracao_update_switch(1, None)

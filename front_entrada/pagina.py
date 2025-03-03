@@ -1,8 +1,9 @@
 from flet import (FloatingActionButton, Icons, ListView,
                   ExpansionPanelList, Colors, ExpansionPanel, ListTile,
-                  Text, Column, Row, IconButton)
+                  Text, Column, Row, IconButton, ControlEvent,
+                  FontWeight)
 
-import flet as ft
+
 import json
 
 from front_entrada.alertdialog_titulo import AlertDialogTitulo
@@ -32,7 +33,7 @@ class PaginaEntrada:
 
         from front_exe import Pagina
 
-        def handle_scroll(e: ft.ControlEvent):
+        def handle_scroll(e: ControlEvent):
             # Converte a string JSON em um dicionário
             data = json.loads(e.data)
 
@@ -54,9 +55,9 @@ class PaginaEntrada:
 
         # Criando o ExpansionPanelList
         panel = ExpansionPanelList(
-            expand_icon_color=Colors.AMBER,
+            expand_icon_color="#FFFF00",
             elevation=8,
-            divider_color=Colors.AMBER,
+            divider_color="#FFFF00",
             controls=[]
         )
 
@@ -113,16 +114,35 @@ class PaginaEntrada:
         # Atualizando a página
         Pagina.PAGE.update()
 
+    def entrada_appbar(self):
+        """Modifica a AppBar existente para a página Entrada"""
+        from front_exe import Pagina
+        Pagina.PAGE.appbar.title = Text(
+            "ENTRADA",
+            size=30,
+            color="#FFFF00",
+            weight=FontWeight.BOLD)
+
+        Pagina.PAGE.update()
+
     def entrada_criar_pagina(self):
 
         self.entrada_widget_mais()
         self.entrada_listview()
+        self.entrada_appbar()
 
     def entrada_atualizar_pagina(self):
 
         from front_exe import Pagina
 
+        self.entrada_apagar_pagina()
+        self.entrada_criar_pagina()
+        self.entrada_appbar()
+
+    def entrada_apagar_pagina(self):
+
+        from front_exe import Pagina
+
+        Pagina.PAGE.floating_action_button = None  # Remove o FloatingActionButton
         Pagina.PAGE.controls.clear()
         Pagina.PAGE.update()
-
-        self.entrada_criar_pagina()
