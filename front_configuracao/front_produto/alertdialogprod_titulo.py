@@ -16,25 +16,33 @@ class AddTituloProduto:
         def adicionar_texto(e):
 
             if text_field.value != "":
-                DbAddProdutoTitulo().pd_insert_texto(text_field.value)
 
-                var_sqlite_max = DbAddProdutoTitulo().pd_select_titulo()
+                len_text = len(DbAddProdutoTitulo().pd_select_possui_titulo(
+                    text_field.value))
 
-                if var_sqlite_max[0][0] == text_field.value:
+                if len_text > 0:
+                    frontMenores().ativar_snackbar("Já possui esse nome")
 
-                    frontMenores().ativar_snackbar("Salvo com sucesso")
+                elif len_text == 0:
+                    DbAddProdutoTitulo().pd_insert_texto(text_field.value)
 
-                    from front_configuracao.front_produto.pagina import (
-                        PaginaProduto
-                    )
+                    var_sqlite_max = DbAddProdutoTitulo().pd_select_titulo()
 
-                    PaginaProduto().produto_update_pagina()
+                    if var_sqlite_max[0][0] == text_field.value:
 
-                    Pagina.PAGE.close(dlg_modal)
+                        frontMenores().ativar_snackbar("Salvo com sucesso")
 
-            elif text_field.value == "":
+                        from front_configuracao.front_produto.pagina import (
+                            PaginaProduto
+                        )
 
-                frontMenores().ativar_snackbar("Digite um título")
+                        PaginaProduto().produto_update_pagina()
+
+                        Pagina.PAGE.close(dlg_modal)
+
+                elif text_field.value == "":
+
+                    frontMenores().ativar_snackbar("Digite um título")
 
         text_field = TextField(
             label="Adicionar Título")

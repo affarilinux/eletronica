@@ -1,7 +1,7 @@
 from flet import (FloatingActionButton, Icons, ListView,
-                  ExpansionPanelList, Colors, ExpansionPanel, ListTile,
+                  ExpansionPanelList, ExpansionPanel, ListTile,
                   Text, Column, Row, IconButton, ControlEvent,
-                  FontWeight)
+                  FontWeight, CupertinoFilledButton, padding, Container)
 
 
 import json
@@ -9,7 +9,7 @@ import json
 from front_entrada.alertdialog_titulo import AlertDialogTitulo
 from front_entrada.alertdialog_editartitulo import AlertDialogEditarTitulo
 from front_entrada.db.db_pagina import DbPagina
-
+from front_entrada.alertdialogent_adic_titulo import AddAdicionarTitulo
 from front_entrada.menores import EntradaMenores
 from menores import frontMenores
 
@@ -52,7 +52,33 @@ class PaginaEntrada:
                 on_click=lambda e: (
                     AlertDialogEditarTitulo(e.control.data[1]))
             ),
+            IconButton(
+                Icons.PLAYLIST_ADD_OUTLINED,
+                tooltip="Editar",
+                data=(exp, id),
+                on_click=lambda e: (
+                    AddAdicionarTitulo())
+            ),
         ]
+
+    def subentrada_listview(self):
+        # Lista de itens para exibir
+        itens = [
+            "Fio elétrico vermelho 0,6mm\nQt: 3\nVl/Un: 3,44",
+            "Fio elétrico verde 0,6mm\nQt: 3 Un\nVl/Un: 3,44",
+            "Fio elétrico amarelo 0,6mm\nQt: 3 Un\nValor: 3,44 Un"
+        ]
+
+        return ListView(
+            expand=True,
+            controls=[
+                Container(
+                    padding=padding.only(bottom=10),  # Espaçamento inferior
+                    content=CupertinoFilledButton(content=Text(item))
+                )
+                for item in itens  # Itera sobre a lista de itens
+            ]
+        )
 
     def entrada_listview(self):
 
@@ -95,10 +121,12 @@ class PaginaEntrada:
                 bgcolor=(frontMenores().cor_list_view()[
                          i % len(frontMenores().cor_list_view())]),
                 header=ListTile(title=Text(f"{dado}")),
+                expand=True
             )
 
             exp.content = Column(
                 controls=[
+                    self.subentrada_listview(),
                     Row(controls=self.criar_list_row_button(exp, id, dado)),
                 ],
                 alignment="start",

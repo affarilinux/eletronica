@@ -18,25 +18,33 @@ class AddPdEditarTitulo:
         def editar_texto(e):
 
             if text_field.value != "":
-                DbAddPdEditarTitulo().update_uptitulo(id_titulo, text_field.value)
 
-                var_sqlite_max = DbAddPdEditarTitulo().select_titulo(id_titulo)
+                len_textup = len(DbAddPdEditarTitulo(
+                ).select_possui_titulo(text_field.value))
 
-                if var_sqlite_max[0][0] == text_field.value:
+                if len_textup > 0:
+                    frontMenores().ativar_snackbar("Já possui esse nome")
 
-                    frontMenores().ativar_snackbar("Salvo com sucesso")
+                elif len_textup == 0:
+                    DbAddPdEditarTitulo().update_uptitulo(id_titulo, text_field.value)
 
-                    from front_configuracao.front_produto.pagina import (
-                        PaginaProduto
-                    )
+                    var_sqlite_max = DbAddPdEditarTitulo().select_titulo(id_titulo)
 
-                    PaginaProduto().produto_update_pagina()
+                    if var_sqlite_max[0][0] == text_field.value:
 
-                    Pagina.PAGE.close(dlg_modal_up)
+                        frontMenores().ativar_snackbar("Salvo com sucesso")
 
-            elif text_field.value == "":
+                        from front_configuracao.front_produto.pagina import (
+                            PaginaProduto
+                        )
 
-                frontMenores().ativar_snackbar("Digite um título")
+                        PaginaProduto().produto_update_pagina()
+
+                        Pagina.PAGE.close(dlg_modal_up)
+
+                elif text_field.value == "":
+
+                    frontMenores().ativar_snackbar("Digite um título")
 
         text_field = TextField(
             label="Adicionar Título")

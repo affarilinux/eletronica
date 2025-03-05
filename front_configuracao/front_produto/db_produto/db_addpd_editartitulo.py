@@ -26,3 +26,16 @@ class DbAddPdEditarTitulo(BaseSqlite):
         self.sair_banco()
 
         return resultado
+
+    def select_possui_titulo(self, nome):
+
+        self.ativar_banco()
+
+        query = """SELECT ID_produto FROM PRODUTO WHERE nome_produto = ?"""
+
+        self.cursorsq.execute(query, (nome,))
+        resultado = self.cursorsq.fetchall()
+
+        self.sair_banco()
+
+        return resultado
